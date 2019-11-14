@@ -1,0 +1,29 @@
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.609), rgba(0, 0, 0, 0.609)), url(img/storm.gif);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+
+.container {
+    width: 70%;
+    color: rgb(187, 187, 187);
+}
+
+.table {
+    text-align: center;
+    color: rgb(156, 156, 156);
+}
+
+.tableRow {
+    background: rgb(39, 39, 39);
+    color: rgb(250, 248, 248);
+    text-align: center;
+    opacity: 0.5;
+    font-size: 105%;
+    
+}
+.main td{
+    padding-left: 50px;
+}
