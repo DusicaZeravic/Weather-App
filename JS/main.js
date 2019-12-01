@@ -6,7 +6,7 @@ const url = "http://api.openweathermap.org/data/2.5/weather?q=Belgrade,rs&APPID=
 
     console.log(body);
 
-    // Initializing object
+    // Init object
     const obj = {
         name: body.name,
         coord: body.coord['lon'],
@@ -20,36 +20,47 @@ const url = "http://api.openweathermap.org/data/2.5/weather?q=Belgrade,rs&APPID=
         weather_icon: body.weather[0]['icon']
     };
 
+    // Covert Farenhait to Celsius
+        let cTemp = Math.floor(obj.main - 273);
+        let cTemp_min = Math.floor(obj.main_temp_min - 273);
+        let cTemp_max = Math.floor(obj.main_temp_max - 273);
+        // Covert wind unit mph to km/h
+        let wind_con = Math.floor(obj.wind * 1.609344);
+
 // Display data on table
-    function displayOnScreen() {
-        $("#icon").append(
-            "<span>"+
-            "<img src =http://openweathermap.org/img/wn/"+obj.weather_icon+".png />"+
-            "</span>"
-        );
+function displayOnScreen() {
+    $("#icon").append(
+        "<span>"+
+        "<img src =http://openweathermap.org/img/wn/"+obj.weather_icon+".png />"+
+        "</span>"
+    );
 
-        $("#listData").append(
-            "<tr class=tableRow>"+
-            "<td>"+obj.name+"</td>"+
-            "<td>"+"<table>"+
-            "<td>"+obj.coord+"</td>"+
-            "<td>"+obj.coord_one+"</td>"+
-            "</table>"+"</td>"+
-            "<td>"+"<table class=main>"+
-            "<td>"+obj.main+"</td>"+
-            "<td>"+obj.main_temp_min+"</td>"+
-            "<td>"+obj.main_temp_max+"</td>"+
-            "<td>"+obj.wind+"</td>"+
-            "<td>"+obj.main_humidity+"</td>"+
-            "</table>"+"</td>"+
-            "<td>"+obj.weather.charAt(0).toUpperCase() + obj.weather.slice(1)+"</td>"+
-            "</tr>"
-        );
+    $("#listData").append(
+        "<tr class=tableRow>"+
+        "<td>"+obj.name+"</td>"+
+        "<td>"+"<table class=coord>"+
+        "<td>"+obj.coord+"</td>"+
+        "<td>"+obj.coord_one+"</td>"+
+        "</table>"+"</td>"+
+        "<td>"+"<table class=main>"+
+        "<td>"+cTemp+"</td>"+
+        "<td>"+cTemp_min+"</td>"+
+        "<td>"+cTemp_max+"</td>"+
+        "<td>"+wind_con+"</td>"+
+        "<td>"+obj.main_humidity+"</td>"+
+        "</table>"+"</td>"+
+        "<td>"+obj.weather.charAt(0).toUpperCase() + obj.weather.slice(1)+"</td>"+
+        "</tr>"
+    );
 
-    }
-    displayOnScreen();
-     
-}).apply();
+}
+displayOnScreen();
+}
+
+).apply();
+
+
+
 
 
 
