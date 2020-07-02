@@ -1,14 +1,21 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-image: linear-gradient(rgba(0, 0, 0, 0.609), rgba(0, 0, 0, 0.609)), url(img/storm.gif);
     background-size: cover;
     background-attachment: fixed;
     background-position: center;
+    /* margin: 0; */
+    width: 100vw;
 }
 
 .container {
     width: 70%;
     color: rgb(192, 175, 79);
     opacity: 0.6;
+    animation: fade-in 2.5s;
 }
 
 .table {
@@ -25,12 +32,12 @@ body {
     color: rgb(250, 248, 248);
     text-align: center;
     opacity: 0.5;
-    font-size: 105%; 
+    font-size: 105%;
 }
 
 .coord th {
    position: relative;
-   left: 9px;
+   left: 5px;
 }
 
 .coord td {
@@ -38,8 +45,8 @@ body {
 
 }
 
-.main td{
-    padding-left: 90px;
+.main td {
+    padding-left: 80px;
 }
 
 hr {
@@ -53,10 +60,57 @@ hr {
     opacity: 0.7;
 }
 
+#button:hover {
+    transform: scale(1.05);
+}
+
+.next {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 12%;
+}
+
+.btn-next {
+    margin-left: 15px;
+    background-color:  rgb(192, 175, 79);
+    font-weight: bold;
+    padding: 8px 20px;
+    border-radius: 5px;
+    color: rgb(26, 25, 25);
+    opacity: 0.7;
+}
+
+.btn-next:hover {
+    transform: scale(1.05);
+}
+
+#button:focus, 
+.btn-next:focus {
+    outline: 0;
+}
+
 .modal {
-    background-color: rgb(24, 23, 23);
+    background-color: rgb(36, 35, 35);
 }
 
 .modal-content {
-    background-color: rgb(236, 236, 236);
+    background-color: rgb(209, 209, 209);
+    position: relative;
+    top: 150px;
 }
+
+.modal-body #city {
+    background-color: rgb(224, 223, 223);
+}
+
+@keyframes fade-in {
+    from { 
+        opacity: 0;
+    }
+    to   { 
+        opacity: 1;
+        color: rgb(192, 175, 79);
+        opacity: 0.6;
+    }
+  }
