@@ -3,20 +3,66 @@ function getURL(city) {
   return `http://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${key}&units=metric`;
 }
 
-function getURLFiveDays (city) {
+function getURLFiveDays(city) {
   return `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}&units=metric`;
 }
+
+// Select elements
+let input = document.querySelector("input");
+let degree = "&#8451";
 
 // Fetch API
 function reload(city) {
   (async () => {
     let response = await fetch(getURL(city));
     let body = await response.json();
-
     console.log(body);
     // Init object
     const obj = new Weather(body);
     displayOnScreen(obj);
+
+    // Get weather data for 5 days
+    let res = await fetch(getURLFiveDays(city));
+    let data = await res.json();
+    console.log(data);
+
+    const fiveDays = [
+      data.list[7],
+      data.list[15],
+      data.list[23],
+      data.list[31],
+      data.list[39],
+    ];
+
+    fiveDays.forEach((data) => {
+      // Show day instead of date
+      var days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      var d = new Date(data.dt * 1000);
+      var dayName = days[d.getDay()];
+
+      // Display weather data for dive days
+      function displayFiveDays(d) {
+        document.getElementById("five-days").innerHTML += `
+         <div class="one-day">
+          <p>${dayName}</p>
+          <img src = http://openweathermap.org/img/wn/${
+            d.weather[0]["icon"]
+          }.png>
+          <h5>${parseInt(d.main.temp)}${degree}</h5>
+          
+         </div>
+        `;
+      }
+      displayFiveDays(data);
+    });
   }).apply();
 }
 
@@ -25,53 +71,43 @@ reload("Belgrade");
 // Weather constructor
 function Weather(body) {
   this.city = body.name;
-  this.lon = body.coord["lon"];
-  this.lat = body.coord["lat"];
+  this.country = body.sys["country"];
   this.temp = Math.floor(body.main["temp"]);
-  this.tempMax = Math.floor(body.main["temp_max"]);
-  this.tempMin = Math.floor(body.main["temp_min"]);
+  this.pressure = body.main["pressure"];
   this.humidity = body.main["humidity"];
   this.wind = Math.floor(body.wind["speed"] * 1.609344);
   this.description = body.weather[0]["description"];
   this.weatherIcon = body.weather[0]["icon"];
 }
 
-// Display data 
+// Display data
 function displayOnScreen(weather) {
-  document.getElementById("icon").innerHTML += `<span class='icon'>
-       <img src = http://openweathermap.org/img/wn/${weather.weatherIcon}.png>
-       </span>`;
-
-  document.getElementById("listData").innerHTML += `<tr class=tableRow> 
-    <td>${weather.city}</td>
-    <td><table class=coord>
-    <td>${weather.lon}</td>
-    <td>${weather.lat}</td>
-    </table></td>
-    <td><table class=main>
-    <td>${weather.temp}</td>
-    <td>${weather.tempMin}</td>
-    <td>${weather.tempMax}</td>
-    <td>${weather.wind}</td>
-    <td>${weather.humidity}</td>
-    </table></td>
-    <td>${
+  document.getElementById("left").innerHTML += `
+    <h2>${weather.city}, ${weather.country}</h2>
+    <h5>${
       weather.description.charAt(0).toUpperCase() + weather.description.slice(1)
-    }</td> 
-    </tr>`;
+    }</h5>
+    <img src = http://openweathermap.org/img/wn/${weather.weatherIcon}.png>
+    <h1 id="temp">${weather.temp}${degree}</h1>`;
+  document.getElementById("right").innerHTML += `
+    <p>Wind: ${weather.wind} km/h</p>
+    <p>Humidity: ${weather.humidity}%</p>
+    <p>Pressure: ${weather.pressure} hPa</p>
+  `;
 }
 
 // Return a value of city input
 function getLocationInput() {
-  return (cityValue = document.getElementById("city").value);
+  return (inputValue = document.getElementById("city").value);
 }
 
-// Display changed data on screen
-let changeBtn = document.getElementById("w-change-btn");
+// Display changed data on the screen
+let changeBtn = document.getElementById("change-btn");
 changeBtn.addEventListener("click", changeCity);
 function changeCity() {
-  $(".tableRow").empty();
-  $(".icon").empty();
+  $(".left").empty();
+  $(".right").empty();
+  $("#five-days").empty();
   reload(getLocationInput());
   if (getLocationInput()) {
     $("#locModal").modal("hide");
@@ -79,19 +115,9 @@ function changeCity() {
   }
 }
 
-// Get weather data for next 5 days
-async function getDataFiveDays(city) {
-    let response = await fetch(getURLFiveDays(city));
-    let data = await response.json();
-    console.log(data);
-
-    const fiveDays = [data.list[7], data.list[15], data.list[23], data.list[31], data.list[39]]; 
-    console.log(fiveDays);
-  
-};
-
-
-
-getDataFiveDays("Belgrade");
-    
-
+// Disable search button if input is empty
+function validate() {
+  if (input.value != "" || input.value != null) {
+    changeBtn.disabled = false;
+  }
+}
