@@ -8,7 +8,7 @@ function getURLFiveDays(city) {
 }
 
 // Select elements
-let input = document.querySelector("input");
+let input = document.getElementById("city");
 let degree = "&#8451";
 
 // Fetch API
@@ -53,8 +53,7 @@ function reload(city) {
         document.getElementById("five-days").innerHTML += `
          <div class="one-day">
           <p>${dayName}</p>
-          <img src = http://openweathermap.org/img/wn/${
-            d.weather[0]["icon"]
+          <img src = http://openweathermap.org/img/wn/${d.weather[0]["icon"]
           }.png>
           <h5>${parseInt(d.main.temp)}${degree}</h5>
           
@@ -84,8 +83,7 @@ function Weather(body) {
 function displayOnScreen(weather) {
   document.getElementById("left").innerHTML += `
     <h2>${weather.city}, ${weather.country}</h2>
-    <h5>${
-      weather.description.charAt(0).toUpperCase() + weather.description.slice(1)
+    <h5>${weather.description.charAt(0).toUpperCase() + weather.description.slice(1)
     }</h5>
     <img src = http://openweathermap.org/img/wn/${weather.weatherIcon}.png>
     <h1 id="temp">${weather.temp}${degree}</h1>`;
@@ -116,8 +114,11 @@ function changeCity() {
 }
 
 // Disable search button if input is empty
+
 function validate() {
   if (input.value != "" || input.value != null) {
     changeBtn.disabled = false;
   }
 }
+
+
